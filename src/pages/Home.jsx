@@ -1,3 +1,4 @@
+import { MoviesList } from "components/MoviesList";
 import { fetchTrendingMovies } from "helpers/api";
 import { useEffect, useState } from "react";
 
@@ -9,7 +10,7 @@ const Home = () => {
       try {
         const data = await fetchTrendingMovies();
         setMovies(data.results);
-        // console.log(data.results);
+        console.log(data.results);
       } catch (error) {
         console.log(error.message);
       }
@@ -20,10 +21,7 @@ const Home = () => {
     return (
         <>
             <h1>Trending today</h1>
-            <ul>
-                <li>1</li>
-                <li>2</li>
-            </ul>
+        <MoviesList movies={movies} />
         </>
     )
 }
