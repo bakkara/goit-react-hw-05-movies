@@ -1,32 +1,43 @@
 import SearchBar from "components/SearchBar";
 import { fetchMoviesByQuery } from "helpers/api";
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useLocation } from "react-router-dom";
+import { toast, Toaster } from 'react-hot-toast';
+import { Loader } from "components/Loader/Loader";
 
 const Movies = () => {
-    const [movies, setMovies] = useState([]);
-    const [searchParams, setSearchParams] = useSearchParams();
-    const query = searchParams.get('query') ?? '';
+  const [movies, setMovies] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const query = searchParams.get('query') ?? '';
+  const location = useLocation();
+  const backLink = location.state?.from ?? '/'
     
     useEffect(() => {
-      if (!query) {
-        return;
-      }
-      const getMoviesListByQuery = async () => {     
+      if (!query) return;
+      
+      async function getMoviesListByQuery() {
         try {
+          setLoading(true);
+          setError(false);
           const { results } = await fetchMoviesByQuery(query);
-          setMovies(results);
           
+          setMovies(results);
           if (!results.length) {
-// return toast.error(`We didn't find anything. Try again`);
-            return;
+            return toast.error(`We didn't find anything. Try again`);
+          } else {
+              toast.success(`We find movies`);
+          }
+          
         }
-        } catch (error) {
+        catch (error) {
           console.log(error.message)
       } finally {
-        /* setLoading(false); */
+        setLoading(false);
       }
-         };
+         }
          getMoviesListByQuery();  
   
     }, [query]);
@@ -37,7 +48,7 @@ const Movies = () => {
         const value = evt.target.query.value.trim('').toLowerCase();
 
     if (value === '') {
-// return toast.error(`We didn't find anything. Try again`);
+
       setSearchParams({});
       return;
     }
@@ -46,9 +57,14 @@ const Movies = () => {
   
   };
     return (
-        <>
-          <SearchBar onSubmit={ handleSubmit}/>
+      <>
+        {loading && <Loader/> }
+        {error && !loading && toast.error(`OOPS! THERE WAS AN ERROR!`)}
+        <SearchBar onSubmit={handleSubmit} />
+
+              <Link to={backLink}>
         <button>Go back</button>
+      </Link>
         
             {movies.map(({ id, title }) => {
                 return (
@@ -59,6 +75,7 @@ const Movies = () => {
                   </li>
                 )
             })}
+        <Toaster position="top-right"/>
         </>
     )
 }

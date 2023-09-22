@@ -8,8 +8,7 @@ const defaultImg =
 const Cast = () => {
     const { movieId } = useParams();
     const [actors, setActors] = useState([]);
-    console.log(actors)
-    console.log(movieId)
+
     useEffect(() => {
     if (!movieId) {
       return;
@@ -18,9 +17,8 @@ const Cast = () => {
     const getActorsList = async () => {
         try {
         const { cast } = await fetchCastById(movieId);
-            setActors(cast);
-            console.log(actors)
-            console.log(cast)
+          setActors(cast);
+          console.log(actors)
       } catch (error) {
         console.log(error.message)
       } finally {
@@ -42,12 +40,11 @@ const Cast = () => {
                   <img
                     src={
                       profile_path
-                        ? `https://image.tmdb.org/t/p/w185/${profile_path}`
+                        ? `https://image.tmdb.org/t/p/w500/${profile_path}`
                         : defaultImg
                     }
                     alt={name}
-                    width={185}
-                    height={278}
+                    width={200}
                   />
                 </div>
                 <div>

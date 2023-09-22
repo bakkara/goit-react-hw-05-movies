@@ -2,11 +2,13 @@
 import { MovieCard } from 'components/MovieCard';
 import { fetchMovieDetailsById } from 'helpers/api';
 import { useEffect, useState } from 'react'
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movieInfo, setMovieInfo] = useState(null);
+  const location = useLocation();
+  const backLink = location.state?.from ?? '/'
   // const [loading, setLoading] = useState(false)
   // const [error, setError] = useState(false)
  
@@ -34,6 +36,10 @@ const MovieDetails = () => {
 
   return (
     <>
+      <Link to={backLink}>
+        <button>Go back</button>
+      </Link>
+      
       <div>MovieDetails</div>
       {movieInfo && <MovieCard movieInfo={movieInfo} />}
       <ul>

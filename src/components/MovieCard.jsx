@@ -5,6 +5,8 @@ const defaultImg =
 export const MovieCard = ({ movieInfo }) => {
     const { poster_path, title, vote_average, overview, genres, release_date } =
         movieInfo;
+    const date = new Date(release_date);
+    const userScore = Math.round((vote_average * 100) / 10)
     
     return (
         <>
@@ -15,7 +17,20 @@ export const MovieCard = ({ movieInfo }) => {
         }
         width={250}
                 alt="poster" />
-            <h2>{title}</h2>
+            <h2>{title}({date.getFullYear()})</h2>
+            <p>User Score: {userScore}%</p>
+            <p>Overview: {overview }</p>
+            <p>Genres:</p>
+            <ul>
+                {genres.map(({ id, name }) => {
+                    return (
+                        <li key={id}>
+                              {name}  
+                        </li>
+                    )
+                })}
+            </ul>
+                
 
         </>
     )
