@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast, Toaster } from 'react-hot-toast';
 import { Loader } from "components/Loader/Loader";
+import { MovieList } from "components/MoviesList/MovieList.styled";
 
 const Reviews = () => {
     const { movieId } = useParams();
@@ -37,22 +38,23 @@ const Reviews = () => {
         {error && !loading && toast.error(`OOPS! THERE WAS AN ERROR!`)}
           
         {reviews.length > 0 ? (
-          <ul>
+          <MovieList>
             {reviews.map(({ author, content, id }) => {
               return (
                 <li key={id}>
                   <div>
-                    <p>{author}</p>
+                    <h5>{author}</h5>
                     <p>
-                      Character: {content}
+                      {content}
                     </p>
                   </div>
                 </li>
               );
             })}
-          </ul>) :
+          </MovieList>) :
           (<p>We don't have any reviews for this movie</p>)
-        }
+          }
+          
         <Toaster position="top-right"/>
     </div>
   )
