@@ -1,9 +1,12 @@
-import SearchBar from "components/SearchBar";
+import SearchBar from "components/SearchBar/SearchBar";
 import { fetchMoviesByQuery } from "helpers/api";
 import { useEffect, useState } from "react";
 import { Link, useSearchParams, useLocation } from "react-router-dom";
 import { toast, Toaster } from 'react-hot-toast';
 import { Loader } from "components/Loader/Loader";
+import { Container } from "components/MainContent.styled";
+import { LinkStyled, MovieList } from "components/MoviesList/MovieList.styled";
+import { BsArrowLeft } from 'react-icons/bs';
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
@@ -18,7 +21,7 @@ const Movies = () => {
     useEffect(() => {
       if (!query) return;
       
-      async function getMoviesListByQuery() {
+      const getMoviesListByQuery = async () => {
         try {
           setLoading(true);
           setError(false);
@@ -33,7 +36,7 @@ const Movies = () => {
           
         }
         catch (error) {
-          console.log(error.message)
+          setError(true);
       } finally {
         setLoading(false);
       }
@@ -60,21 +63,25 @@ const Movies = () => {
       <>
         {loading && <Loader/> }
         {error && !loading && toast.error(`OOPS! THERE WAS AN ERROR!`)}
-        <SearchBar onSubmit={handleSubmit} />
+        <Container>
+          <SearchBar onSubmit={handleSubmit} />
+                <Link to={backLink}>
+                  <button> <BsArrowLeft/> Go back</button>
+                </Link>
+          <MovieList>
+              {movies.map(({ id, title }) => {
+                  return (
+                    <li key={id}>
 
-              <Link to={backLink}>
-        <button>Go back</button>
-      </Link>
-        
-            {movies.map(({ id, title }) => {
-                return (
-                  <li key={id}>
-                    <Link to={`${id}`}>
-                        {title}
-                    </Link>
-                  </li>
-                )
-            })}
+                      <LinkStyled to={`${id}`}>
+                          {title}
+                      </LinkStyled>
+                    </li>
+                  )
+              })}
+          </MovieList>
+  
+        </Container>
         <Toaster position="top-right"/>
         </>
     )

@@ -1,6 +1,8 @@
 import { fetchCastById } from "helpers/api";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast, Toaster } from 'react-hot-toast';
+import { Loader } from "components/Loader/Loader";
 
 const defaultImg =
   'https://png.pngitem.com/pimgs/s/508-5087257_clip-art-hd-png-download.png';
@@ -8,6 +10,8 @@ const defaultImg =
 const Cast = () => {
     const { movieId } = useParams();
     const [actors, setActors] = useState([]);
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(false)
 
     useEffect(() => {
     if (!movieId) {
@@ -15,24 +19,27 @@ const Cast = () => {
     }
 
     const getActorsList = async () => {
-        try {
+      try {
+        setLoading(true);
+        setError(false);
         const { cast } = await fetchCastById(movieId);
-          setActors(cast);
-          console.log(actors)
+        setActors(cast);
+          
       } catch (error) {
-        console.log(error.message)
+        setError(true);
       } finally {
-        
+        setLoading(false);
       }
     };
 
     getActorsList();
-    }, [movieId, actors]);
+    }, [movieId]);
     
 
   return (
       <div>
-          
+        {loading && <Loader/> }
+        {error && !loading && toast.error(`OOPS! THERE WAS AN ERROR!`)}
           {actors.map(({ profile_path, name, character, id }) => {
             return (
               <li key={id}>
@@ -49,13 +56,12 @@ const Cast = () => {
                 </div>
                 <div>
                   <p>{name}</p>
-                  <p>
-                    Character: {character ? character : 'not mentioned'}
-                  </p>
+                  <p>{character}</p>
                 </div>
               </li>
             );
           })}
+        <Toaster position="top-right"/>
     </div>
   )
 }

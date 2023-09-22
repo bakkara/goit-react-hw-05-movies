@@ -1,5 +1,5 @@
 import { Loader } from "components/Loader/Loader";
-import { MoviesList } from "components/MoviesList";
+import { MoviesList } from "components/MoviesList/MoviesList";
 import { fetchTrendingMovies } from "helpers/api";
 import { useEffect, useState } from "react";
 import { toast, Toaster } from 'react-hot-toast';
@@ -30,7 +30,6 @@ const Home = () => {
       <>
         {loading && <Loader />}
         {error && !loading && toast.error(`OOPS! THERE WAS AN ERROR!`)}
-            <h1>Trending today</h1>
         <MoviesList movies={movies} />
         <Toaster position="top-right"/>
         </>
