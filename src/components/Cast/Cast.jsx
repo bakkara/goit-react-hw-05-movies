@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast, Toaster } from 'react-hot-toast';
 import { Loader } from "components/Loader/Loader";
-import { MovieList } from "components/MoviesList/MovieList.styled";
+import { CastItem, CastList } from "./Cast.styled";
 
 const defaultImg =
   'https://png.pngitem.com/pimgs/s/508-5087257_clip-art-hd-png-download.png';
@@ -41,10 +41,11 @@ const Cast = () => {
       <div>
         {loading && <Loader/> }
         {error && !loading && toast.error(`OOPS! THERE WAS AN ERROR!`)}
-         <MovieList>
+         <CastList>
       {actors.map(({ profile_path, name, character, id }) => {
-            return (
-              <li key={id}>
+        return (
+            
+              <CastItem key={id}>
                 <div>
                   <img
                     src={
@@ -60,10 +61,10 @@ const Cast = () => {
                   <p>{name}</p>
                   <p>{character}</p>
                 </div>
-              </li>
+              </CastItem>
             );
       })}
-      </MovieList>
+      </CastList>
         <Toaster position="top-right"/>
     </div>
   )
