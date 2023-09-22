@@ -1,18 +1,53 @@
-import React from 'react'
-import { useParams } from 'react-router-dom';
+
+import { MovieCard } from 'components/MovieCard';
+import { fetchMovieDetailsById } from 'helpers/api';
+import { useEffect, useState } from 'react'
+import { Link, Outlet, useParams } from 'react-router-dom';
 
 const MovieDetails = () => {
-    const params = useParams();
-    // useEffect(() => {
-//   //HTTP запрос
+  const { movieId } = useParams();
+  const [movieInfo, setMovieInfo] = useState(null);
+  // const [loading, setLoading] = useState(false)
+  // const [error, setError] = useState(false)
+ 
+  useEffect(() => {
+    if (!movieId) return;
+    
+    const getMovieInfoById = async () => {
+      try {
+        /* setLoading(true);
+        setError(false); */
+        const data = await fetchMovieDetailsById(movieId);
+        setMovieInfo(data);
+        
+      } catch (error) {
+        console.log(error.message)
+        /* setError(true); */
+         /* toast.error(`OOPS! THERE WAS AN ERROR!`) */
+      } finally {
+        /* setLoading(false); */
+      }
+    };
 
-// //   return () => {
-// //     second
-// //   }
-// }, [])
-    console.log(params)
+    getMovieInfoById();
+  }, [movieId]);
+
   return (
-    <div>MovieDetails</div>
+    <>
+      <div>MovieDetails</div>
+      {movieInfo && <MovieCard movieInfo={movieInfo} />}
+      <ul>
+        <li>
+          <Link to='cast'>
+            Cast
+          </Link>
+        </li>
+        <li>
+          <Link to='reviews'>Reviews</Link>
+        </li>
+      </ul>
+      <Outlet/>
+    </>
   )
 }
 export default MovieDetails;
