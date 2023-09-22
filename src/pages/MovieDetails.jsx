@@ -1,7 +1,7 @@
 
 import { MovieCard } from 'components/MovieCard/MovieCard';
 import { fetchMovieDetailsById } from 'helpers/api';
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
 import { Loader } from "components/Loader/Loader";
@@ -59,8 +59,12 @@ const MovieDetails = () => {
         <li>
           <Link to='reviews'>Reviews</Link>
         </li>
-      </MovieList>
+        </MovieList>
+
+      <Suspense fallback={<Loader/>}>
         <Outlet />
+        </Suspense>
+        
       </Container>
       <Toaster position="top-right"/>
     </>
