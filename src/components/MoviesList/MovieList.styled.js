@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 export const MovieList = styled.ul`
 text-decoration: none;
 list-style: none;
-margin-left: 20px;
 display: flex;
 flex-direction: column;
 gap: 8px;

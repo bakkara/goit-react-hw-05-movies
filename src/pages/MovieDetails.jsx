@@ -1,7 +1,7 @@
 
 import { MovieCard } from 'components/MovieCard/MovieCard';
 import { fetchMovieDetailsById } from 'helpers/api';
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
 import { Loader } from "components/Loader/Loader";
@@ -13,7 +13,7 @@ const MovieDetails = () => {
   const { movieId } = useParams();
   const [movieInfo, setMovieInfo] = useState(null);
   const location = useLocation();
-  const backLink = location.state?.from ?? '/'
+  const backLink = useRef(location.state?.from ?? '/')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
  
@@ -44,7 +44,7 @@ const MovieDetails = () => {
         {loading && <Loader/> }
       {error && !loading && toast.error(`OOPS! THERE WAS AN ERROR!`)}
       <Container>
-      <Link to={backLink}>
+   <Link to={backLink.current}>
         <button> <BsArrowLeft/> Go back</button>
       </Link>
       
